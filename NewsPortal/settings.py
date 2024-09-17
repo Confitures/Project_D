@@ -38,9 +38,18 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'news',
+    'news.apps.NewsConfig',  #  изменено D6.9:  'news', на
     'accounts',
     'fpages',
+    'django_filters',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.yandex',
+    'django_apscheduler',
+
 ]
 
 SITE_ID = 1
@@ -55,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',  # unclear
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'NewsPortal.urls'
@@ -67,15 +77,47 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',  # Удалить! или строчку ниже
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # 'django.template.context_processors.request',
             ],
         },
     },
 ]
 
+# D5.4
+# Этого раздела может не быть, добавьте его в указанном виде.
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'  #  следует указать 'mandatory - обязательная авторизация при регистрации; none - нет'
+
+SITE_URL = 'http://127.0.0.1:8000'  #  D6.7 вебинар
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  #  .env - переменные окружения
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  #  .env - переменные окружения
+EMAIL_USER_SSL = True
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')  #  .env - переменные окружения
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  #  Default: 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}  #  ACCOUNT_FORMS = {"signup": "accounts.forms.BasicSignupForm"}
+
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
+
+APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'  #  формат даты (когда делать рассылку в принципе)
+APSCHEDULER_RUN_NOW_TIMEOUT = 1  #  если функция будет выполнятся дольже 25 сек. - принудительно вырубится
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -116,10 +158,40 @@ USE_I18N = True
 
 USE_TZ = True
 
+SOCIALACCOUNT_PROVIDERS = {
+    # 'google': {  #  не работает!!!
+    #     'SCOPE': [
+    #         'profile',
+    #         'emaile',
+    #     ],
+    #     'AUTH_PARAMS': {
+    #         'access_type': 'online',
+    #     },
+    # },
+    'google': {
+        'APP': {
+            'client_id': '123',
+            'secret': '456',
+            'key': ''
+        }
+    },
+
+    'yandex': {
+        'APP': {
+            'client_id': '123',
+            'secret': '456',
+            'key': ''
+        }
+    },
+
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+LOGIN_REDIRECT_URL = "/newsportal/news/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -127,5 +199,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static"
+    BASE_DIR / "static"  # для подгрузки стилей из папки static.
 ]

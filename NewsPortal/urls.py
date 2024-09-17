@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from news.views import (
+    subscriptions, CategoryListView,
+)
+
 # urlpatterns = [
 #     path('admin/', admin.site.urls),
 # ]
@@ -25,4 +29,10 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
+    path('newsportal/', include('news.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('subscriptions/', subscriptions, name='subscriptions'),
+    # path('articles/', include('news.urls')),
+    # path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),  #  вебинар D 9/11 ??? delete!!!
+
 ]
