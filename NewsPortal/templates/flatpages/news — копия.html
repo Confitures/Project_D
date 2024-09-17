@@ -1,0 +1,118 @@
+{% extends 'flatpages/default.html' %}
+
+
+{# load custom_filters #}
+
+{% block title %}
+news
+{% endblock title %}
+
+{% block content %}
+<h1>Новости!<h1>
+<hr>
+
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Найти" />
+    </form>
+
+    {% if perms.news.add_post %}
+    <a href="{% url 'news_create' %}">Добавить Новость (не статью!)</a>
+    {% endif %}
+
+    {% if news %}
+    <ul >
+        {% for newspost in news %}
+            <li class="list-group-item">
+                <small class="fw-blod">категории:
+                    {% for category in newspost.category.all %}
+                        <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                    {% endfor %}
+                </small>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <h3 align="left">
+<!--        <small class="fw-blod">категории:-->
+<!--            {% for category in news.values %}-->
+<!--                <a href="{% url 'category_list' category.id %}">{{ category }}</a>-->
+<!--            {% endfor %}-->
+<!--        </small>-->
+        <table>
+            <tr>
+                <td>Заголовок</td>
+                <td>Публикация</td>
+                <td>Содержание</td>
+
+                {% if perms.news.change_post or perms.news.delete_post %}
+                <td>Действия</td>
+                {% endif %}
+            </tr>
+<!--                <h1>hi</h1>-->
+<!--                <h1>{{ news.category.all }}</h1>-->
+
+<!--            {% for category in news.category.all %}-->
+<!--                <h1>hi</h1>-->
+<!--                <a href="{% url 'category_list' category.id %}">hi}</a>-->
+<!--            {% endfor %}-->
+
+            {% for n in news %}
+
+            <tr>
+<!--                {% for category in n.category.all %}-->
+<!--                <tb>-->
+<!--&lt;!&ndash;                    <a href="{% url 'category_list' category.id %}">{{ category }}</a>&ndash;&gt;-->
+<!--                </tb>-->
+<!--&lt;!&ndash;                <a href="{% url 'category_list' category.id %}">{{ category }}</a>&ndash;&gt;-->
+<!--                {% endfor %}-->
+                <td>{{ n.title }}</td>
+                <td>{{ n.time_created|date:'- d M Y -' }}</td>
+<!--                {% for category in n.category.union %}-->
+<!--                    <a href="{% url 'category_list' category.id %}">{{ category }}</a>-->
+<!--                {% endfor %}-->
+                <td>{{ n.text|truncatechars:21 }}</td>
+
+                <td>
+                    {% if perms.news.change_post %}
+                    <a href="{% url 'news_update' pk=n.id %}">Изменить  |</a>
+                    {% endif %}
+
+                    {% if perms.news.delete_post %}
+                    <a href="{% url 'news_delete' n.id %}">Удалить</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </h3>
+    {% else %}
+        <h2>Нет новостей!</h2>
+    {% endif %}
+
+
+   {# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}
