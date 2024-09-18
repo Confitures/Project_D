@@ -1,9 +1,6 @@
 D6.7
 Задание 6.7.1 (HW-03)
 
-Отклонение от задания:
-SOCIAL ACCOUNTS реализован для GOOGLE. 
-в SOCIALACCOUNT_PROVIDERS загатовка для Yandex (без подключения). 
 
 1. часть
 - подписки на рассылку: http://127.0.0.1:8000/subscriptions/
