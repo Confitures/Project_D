@@ -18,7 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 from news.views import (
-    subscriptions, CategoryListView,
+    subscriptions,
+    CategoryListView,
+    # new_add,
 )
 
 # urlpatterns = [
@@ -34,5 +36,5 @@ urlpatterns = [
     path('subscriptions/', subscriptions, name='subscriptions'),
     # path('articles/', include('news.urls')),
     # path('categories/<int:pk>', CategoryListView.as_view(), name='category_list'),  #  вебинар D 9/11 ??? delete!!!
-
+    # path('app/', new_add),  ## D 7.4 DELETE !!!!
 ]

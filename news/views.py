@@ -226,5 +226,14 @@ def subscribe(request, pk):  #  вебинар D 9/13
     return render(request, 'flatpages/subscribe.html', {'category': category, 'message': message})
 
 
-
+# ## D 7.4 DELETE !!!!
+# from django.shortcuts import render
+# from django.http import HttpResponse
+# from .tasks import add
+#
+#
+# def new_add(request):
+#     a = add.delay(5, 5)  # .delay вызывает функции celery !
+#     return HttpResponse(str(a))
+##___________________________
 

@@ -25,7 +25,11 @@ def my_job():
     posts = Post.objects.filter(time_created__gte=last_week)
     categories = set(posts.values_list('category__pk',
                                        flat=True)
-                     )  # flat=True - если не использовать, values_list вернёт список словарей, где ключём будет category__category, а значением - название категории. flat=True даст список строк без словаря
+                     )
+    # flat=True - если не использовать, values_list вернёт список словарей,
+    # где ключём будет category__category, а значением - название категории.
+    # flat=True даст список строк без словаря
+
     # print(f'0______________________')
     # print(f'\n posts = {posts}')
     # print(f'\n categories = {categories}')

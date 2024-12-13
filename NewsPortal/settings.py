@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-055#kie_+_2r_r!h3ith4$)x+jp=e@9h9(#cgcncwr#q^#d8jd'
+SECRET_KEY = 'TEST'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
-    'django_apscheduler',
+    # 'django_apscheduler',  #  временно отключил Планировщик apscheduler
 
 ]
 
@@ -201,3 +201,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"  # для подгрузки стилей из папки static.
 ]
+
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_TIME_LIMIT = 30 * 60
+#_________________________________________________
+#  https://mailmeteor.com/blog/gmail-smtp-settings
+
+# EMAIL_HOST = 'smtp.gmail.com'  #  Gmail SMTP server address: smtp.gmail.com
+# EMAIL_PORT = 587  #  Gmail SMTP port (TLS): 587
+# EMAIL_HOST_USER = '' #  Your Gmail address
+# EMAIL_HOST_PASSWORD = '' #  Your Gmail password
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# EMAIL_TIMEOUT = 60
+
+#_________________________________________________
