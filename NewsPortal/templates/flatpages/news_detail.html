@@ -1,0 +1,17 @@
+{% extends 'flatpages/default.html' %}
+
+{% load censor %}
+
+{% block title %}
+{{ news.title|censor }}
+{% endblock title %}
+
+{% block content %}
+<h1 style="text-transform: capitalize">
+{{ news.title|censor }}
+<h1>
+<hr>
+<h6 align="right">{{ news.time_created|date:'d M Y' }}</h6>
+<h5 align="justify">{{ news.text|censor }}</h5>
+{% endblock content %}
+
